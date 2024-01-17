@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <template id="order_pdf_inherit_report_saleorder_document" inherit_id="sale.report_saleorder_document" priority="50">
+            <xpath expr="//table[hasclass('table-borderless')]/thead/tr/th[@name='th_description']" position="before">
+                <th name="th_stt" class="text-start">STT</th>
+                <th name="th_service" class="text-start">Tên hàng hóa/Dịch vụ</th>
+            </xpath>
+            <xpath expr="//table[hasclass('table-borderless')]/tbody[hasclass('sale_tbody')]/t[1]" position="after">
+                <t t-set="loop_index" t-value="1" />
+            </xpath>
+            <xpath expr="//table[hasclass('table-borderless')]/tbody[hasclass('sale_tbody')]/t/tr/t[@t-if='not line.display_type']/td[@name='td_name']" position="before">
+                <td name="th_stt" class="text-start">
+                    <t t-esc="loop_index" />
+                </td>
+                <td name="th_service" class="text-start">
+                    <span t-field="line.product_id.name" />
+                </td>
+            </xpath>
+            <xpath expr="//table[hasclass('table-borderless')]/tbody[hasclass('sale_tbody')]/t[@t-foreach='lines_to_report']" position="inside">
+                <t t-set="loop_index" t-value="loop_index + 1" />
+            </xpath>
+            <xpath expr="//table[hasclass('table-borderless')]/thead/tr/th[@name='th_description']" position="replace">
+                <th name="th_description" class="text-start">Mô tả</th>
+            </xpath>
+            <xpath expr="//table[hasclass('table-borderless')]/thead/tr/th[@name='th_taxes']" position="attributes">
+                <attribute name="t-if">'invisible' == 'non_invisible'</attribute>
+            </xpath>
+            <xpath expr="//table[hasclass('table-borderless')]/thead/tr/th[@name='th_quantity']" position="after">
+                <th name="th_unit" class="text-start">Đơn vị</th>
+            </xpath>
+            <xpath expr="//table[hasclass('table-borderless')]/tbody/t/tr/t[@t-if='not line.display_type']/td[@name='td_quantity']/span[@t-field='line.product_uom']" position="replace">
+                <span />
+            </xpath>
+            <xpath expr="//table[hasclass('table-borderless')]/tbody/t/tr/t[@t-if='not line.display_type']/td[@name='td_quantity']" position="after">
+                <td name="td_unit" class="text-start">
+                    <span t-field="line.product_uom">units</span>
+                </td>
+            </xpath>
+            <xpath expr="//table[hasclass('table-borderless')]/tbody/t/tr/t[@t-if='not line.display_type']/td[@name='td_taxes']" position="attributes">
+                <attribute name="t-if">'invisible' == 'non_invisible'</attribute>
+            </xpath>
+        </template>
+    </data>
+</odoo>
